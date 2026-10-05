@@ -112,10 +112,8 @@ def analyze_apk(path):
     result["urls"] = unique(URL_RE.findall(blob))[:30]
     result["ips"] = unique(IP_RE.findall(blob))[:30]
 
-    apk = None
     if ANDROGUARD_AVAILABLE:
         try:
-            # Parse the APK once and reuse the same object below.
             apk = APK(path) # pyright: ignore[reportPossiblyUnboundVariable]
             result["package"] = apk.get_package() or "Unknown"
             result["version"] = apk.get_androidversion_name() or "Unknown"
@@ -261,9 +259,9 @@ def analyze_apk(path):
         })
 
     cert_score = 0
-    if ANDROGUARD_AVAILABLE and apk is not None:
+    if ANDROGUARD_AVAILABLE:
         try:
-            # Reuse the APK object parsed above; no second full APK parse.
+            apk = APK(path) # pyright: ignore[reportPossiblyUnboundVariable]
             certs = apk.get_certificates_der_v2() or apk.get_certificates_der_v3() or apk.get_certificates()
             result["certificate_present"] = bool(certs)
         except Exception:

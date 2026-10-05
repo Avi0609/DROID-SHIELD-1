@@ -34,23 +34,13 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-5. Configure Neon PostgreSQL:
-
-Create a Neon project and add its pooled PostgreSQL connection string as the `DATABASE_URL` environment variable. For example:
-
-```text
-DATABASE_URL=postgresql://USER:PASSWORD@HOST/DBNAME?sslmode=require
-```
-
-The app automatically creates these tables on startup: `apk_scans`, `apk_permissions`, `apk_components`, `apk_intents`, `apk_apis`, `apk_network_indicators`, `risk_factors`, and `scan_scores`.
-
-6. Run:
+5. Run:
 
 ```bash
 python app.py
 ```
 
-7. Open:
+6. Open:
 http://127.0.0.1:5000
 
 ## If Python command is not recognized
