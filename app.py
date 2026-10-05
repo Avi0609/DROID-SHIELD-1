@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from werkzeug.utils import secure_filename
 from analyzer import analyze_apk
+from database import init_db, is_configured, save_analysis
 import os
 
 app = Flask(__name__)
@@ -27,6 +28,16 @@ def analyze():
 
     try:
         result = analyze_apk(path)
+        if is_configured():
+            result["database_saved"] = False
+            try:
+                result["scan_id"] = save_analysis(result)
+                result["database_saved"] = True
+            except Exception as db_error:
+                app.logger.exception("Neon database save failed")
+                result["database_error"] = str(db_error)
+        else:
+            result["database_saved"] = False
         return jsonify(result)
     except Exception as e:
         return jsonify({"error": f"Analysis failed: {str(e)}"}), 500
@@ -37,4 +48,12 @@ def analyze():
             pass
 
 if __name__ == "__main__":
+    if is_configured():
+        try:
+            init_db()
+            app.logger.info("Neon database initialized")
+        except Exception as e:
+            app.logger.error("Neon database initialization failed: %s", e)
+    else:
+        app.logger.warning("DATABASE_URL is not configured; database saving is disabled")
     app.run(host="0.0.0.0", port=5000, debug=True)
