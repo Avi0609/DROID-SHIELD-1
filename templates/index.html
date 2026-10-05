@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DROID-SHIELD | Android Malware Detection</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="/static/style (1).css">
+</head>
+<body>
+<div class="container">
+  <header>
+    <div>
+      <h1>🛡 DROID-SHIELD</h1>
+      <p>Explainable Android APK Malware Risk Assessment</p>
+    </div>
+    <span class="badge">STATIC ANALYSIS</span>
+  </header>
+
+  <section class="upload-card">
+    <div id="dropzone">
+      <div class="icon">📱</div>
+      <h2>Analyze an Android APK</h2>
+      <p>Upload an APK to inspect permissions, components, APIs, network indicators and other security signals.</p>
+      <input id="apk" type="file" accept=".apk" hidden>
+      <button onclick="document.getElementById('apk').click()">Choose APK</button>
+      <p id="filename" class="muted">No file selected</p>
+    </div>
+    <button id="analyzeBtn" class="analyze" disabled>ANALYZE APK</button>
+    <div id="progress" class="progress hidden">
+      <span>Analyzing APK…</span>
+      <div class="bar"><div id="bar"></div></div>
+      <small>Extracting manifest → scanning indicators → generating risk assessment</small>
+    </div>
+  </section>
+
+  <section id="results" class="hidden">
+    <div class="hero-grid">
+      <div class="score-card">
+        <p>SECURITY RISK SCORE</p>
+        <div id="score">0</div>
+        <div id="classification" class="classification">—</div>
+        <p id="summary"></p>
+      </div>
+      <div class="info-card">
+        <h3>APK Information</h3>
+        <div class="info-row"><span>File</span><b id="file"></b></div>
+        <div class="info-row"><span>Package</span><b id="package"></b></div>
+        <div class="info-row"><span>Size</span><b id="size"></b></div>
+        <div class="info-row"><span>SHA-256</span><b id="sha"></b></div>
+        <div class="info-row"><span>Parser</span><b id="parser"></b></div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <h3>Risk Breakdown</h3>
+        <canvas id="chart"></canvas>
+      </div>
+      <div class="panel">
+        <h3>Why was it flagged?</h3>
+        <div id="factors"></div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <h3>Permissions</h3>
+        <div id="permissions" class="chips"></div>
+      </div>
+      <div class="panel">
+        <h3>Suspicious API Indicators</h3>
+        <div id="apis" class="chips"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Components & Network Indicators</h3>
+      <div class="stats">
+        <div><b id="activities">0</b><span>Activities</span></div>
+        <div><b id="services">0</b><span>Services</span></div>
+        <div><b id="receivers">0</b><span>Receivers</span></div>
+        <div><b id="urls">0</b><span>URLs</span></div>
+        <div><b id="ips">0</b><span>IP Addresses</span></div>
+      </div>
+    </div>
+  </section>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>
